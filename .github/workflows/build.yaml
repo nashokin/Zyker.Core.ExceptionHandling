@@ -1,28 +1,118 @@
-# This workflow will build a .NET project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-
-name: .NET
+name: Build
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
+      - develop
+    tags:
+      - "v*"
+
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - develop
+      - release/**
+      - feature/**
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      id-token: write # enable GitHub OIDC token issuance for this job
+
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+      # Pre-requisites: checkout and setup .net 10 SDK
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .net 10 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Display .net version
+        run: dotnet --version
+
+      # Build projects in the solution
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      # Run tests and collect coverage
+      - name: Test
+        run: dotnet test --configuration Release --no-build
+
+      # Run SonarCloud analysis
+      - name: Install dotnet-coverage tool
+        run: dotnet tool install --global dotnet-coverage
+
+      - name: Install SonarScanner
+        run: dotnet tool install --global dotnet-sonarscanner
+
+      - name: Sonar Analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          dotnet sonarscanner begin \
+              /k:"nashokin_Zyker.Core.ExceptionHandling" \
+              /o:"nashokin" \
+              /d:sonar.login="${SONAR_TOKEN}" \
+              /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
+          dotnet build --no-incremental
+          dotnet-coverage collect 'dotnet test' -f xml  -o 'coverage.xml'
+          dotnet sonarscanner end /d:sonar.login="${SONAR_TOKEN}"
+
+        # Pack and publish NuGet package
+      - name: Generate Version
+        id: version
+        shell: bash
+        run: |
+          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+            VERSION="${GITHUB_REF_NAME#v}"
+
+          elif [[ "${GITHUB_REF_NAME}" == "develop" ]]; then
+            VERSION=$(grep -oPm1 '(?<=<Version>)[^<]+' Zyker.Core.ExceptionHandling/Zyker.Core.ExceptionHandling.csproj)
+            VERSION="${VERSION}-prerelease.${GITHUB_RUN_NUMBER}"
+
+          else
+            VERSION=$(grep -oPm1 '(?<=<Version>)[^<]+' Zyker.Core.ExceptionHandling/Zyker.Core.ExceptionHandling.csproj)
+          fi
+
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Package Version: $VERSION"
+
+      - name: Pack
+        run: |
+          dotnet pack \
+          --configuration Release \
+          --no-build \
+          -p:PackageVersion=${{ steps.version.outputs.version }} \
+          -o ./artifacts
+
+      # Get a short-lived NuGet API key
+      - name: NuGet login (OIDC → temp API key)
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
+      - name: Publish
+        run: |
+          dotnet nuget push \
+          "./artifacts/*.nupkg" \
+          --api-key ${{steps.login.outputs.NUGET_API_KEY}} \
+          --source https://api.nuget.org/v3/index.json \
+          --skip-duplicate
