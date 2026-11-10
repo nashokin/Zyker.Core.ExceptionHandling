@@ -1,5 +1,6 @@
 using Shouldly;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using Xunit;
 
@@ -25,16 +26,19 @@ public abstract class ApiExceptionTests<TException>
     [Fact(DisplayName = "StatusCode should match the expected value")]
     public void StatusCode_ShouldMatchExpectedValue()
     {
-        CreateException()
-            .StatusCode
-            .ShouldBe(ExpectedStatusCode);
+        TException exception = CreateException();
+        exception.StatusCode.ShouldBe(ExpectedStatusCode);
+        exception.ToApiError().ShouldNotBeNull().ShouldBeOfType<ApiError>();
+        exception.CorrelationId.ShouldNotBeNull();
+        exception.ErrorCode.ShouldBe(ApiErrorCodes.NOT_AVAILABLE);
+        exception.Message.ShouldNotBeEmpty();
+        exception.Data.ShouldNotBeNull().ShouldNotBeOfType<Dictionary<object, object>>();
 
-        CreateException(EXCEPTION_MESSAGE, ERROR_CODE)
-            .StatusCode
-            .ShouldBe(ExpectedStatusCode);
+        exception = CreateException(EXCEPTION_MESSAGE, ERROR_CODE);
+        exception.ErrorCode.ShouldBe(ERROR_CODE);
+        exception.Message.ShouldBe(EXCEPTION_MESSAGE);
 
-        CreateException(EXCEPTION_MESSAGE, ERROR_CODE, _innerException)
-            .StatusCode
-            .ShouldBe(ExpectedStatusCode);
+        exception = CreateException(EXCEPTION_MESSAGE, ERROR_CODE, _innerException);
+        exception.InnerException.ShouldBe(_innerException);
     }
 }
