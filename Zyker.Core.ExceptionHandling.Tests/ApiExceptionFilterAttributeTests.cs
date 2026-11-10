@@ -15,7 +15,7 @@ namespace Zyker.Core.ExceptionHandling.Tests;
 /// </summary>
 public class ApiExceptionFilterAttributeTests
 {
-    private const string CorrelationId = "019abcdef0-1234-7000-8000-123456789abc";
+    private const string CORRELATION_ID = "019abcdef0-1234-7000-8000-123456789abc";
 
     [Fact(DisplayName = "Constructor without logger should create instance")]
     public void Constructor_WithoutLogger_ShouldCreateInstance()
@@ -52,12 +52,12 @@ public class ApiExceptionFilterAttributeTests
     public void OnException_WhenApiException_ShouldUseCorrelationIdHeader()
     {
         BadRequestException exception = new("Bad request exception", ApiErrorCodes.BAD_REQUEST);
-        ExceptionContext context = CreateContext(exception, CorrelationId);
+        ExceptionContext context = CreateContext(exception, CORRELATION_ID);
 
         ApiExceptionFilterAttribute filter = new();
         filter.OnException(context);
 
-        Assert.Equal(CorrelationId, exception.CorrelationId);
+        Assert.Equal(CORRELATION_ID, exception.CorrelationId);
     }
 
     [Fact(DisplayName = "Should generate correlation ID, when header is missing")]
@@ -107,7 +107,7 @@ public class ApiExceptionFilterAttributeTests
     {
         Mock<ILogger<ApiExceptionFilterAttribute>> logger = new();
         BadRequestException exception = new("Bad request exception", ApiErrorCodes.BAD_REQUEST);
-        ExceptionContext context = CreateContext(exception, CorrelationId);
+        ExceptionContext context = CreateContext(exception, CORRELATION_ID);
 
         ApiExceptionFilterAttribute filter = new(logger.Object);
         filter.OnException(context);
