@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using Zyker.Core.ExceptionHandling.Exceptions;
 
@@ -10,6 +11,12 @@ public sealed class InternalExceptionTests
 {
     protected override InternalException CreateException()
         => new();
+
+    protected override InternalException CreateException(string message, string errorCode)
+        => new(message, errorCode);
+
+    protected override InternalException CreateException(string message, string errorCode, Exception innerException)
+        => new(message, errorCode, innerException);
 
     protected override HttpStatusCode ExpectedStatusCode
         => HttpStatusCode.InternalServerError;

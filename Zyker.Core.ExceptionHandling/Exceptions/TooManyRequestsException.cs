@@ -3,7 +3,7 @@ using System.Net;
 
 namespace Zyker.Core.ExceptionHandling.Exceptions;
 /// <summary>
-///     Class to represent an "Too Many Requests" (429) error response.
+///     Class to represent "Too Many Requests" (429) error response.
 /// </summary>
 public sealed class TooManyRequestsException
     : ApiException

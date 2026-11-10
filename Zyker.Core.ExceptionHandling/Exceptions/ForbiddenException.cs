@@ -3,7 +3,7 @@ using System.Net;
 
 namespace Zyker.Core.ExceptionHandling.Exceptions;
 /// <summary>
-///     Class to represent a "Forbidden" (403) error response.
+///     Class to represent "Forbidden" (403) error response.
 /// </summary>
 public sealed class ForbiddenException
     : ApiException

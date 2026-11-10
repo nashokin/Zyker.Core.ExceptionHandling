@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using Zyker.Core.ExceptionHandling.Exceptions;
 
@@ -10,6 +11,12 @@ public sealed class UnauthorizedExceptionTests
 {
     protected override UnauthorizedException CreateException()
         => new();
+
+    protected override UnauthorizedException CreateException(string message, string errorCode)
+        => new(message, errorCode);
+
+    protected override UnauthorizedException CreateException(string message, string errorCode, Exception innerException)
+        => new(message, errorCode, innerException);
 
     protected override HttpStatusCode ExpectedStatusCode
         => HttpStatusCode.Unauthorized;

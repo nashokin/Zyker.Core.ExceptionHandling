@@ -2,7 +2,9 @@ using System;
 using System.Net;
 
 namespace Zyker.Core.ExceptionHandling.Exceptions;
-
+/// <summary>
+///     Class to represent "Bad Request" (400) validation error response.
+/// </summary>
 public sealed class ValidationException
     : ApiException
 {
