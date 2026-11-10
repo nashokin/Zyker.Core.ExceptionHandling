@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Version>1.0.0</Version>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <Authors>Daniel Nashokin</Authors>
+        <PackageTags>Zyker;Core;Exception;ExceptionHandling</PackageTags>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <Title>Exception handling extension filter.</Title>
+        <Authors>Daniel Nashokin</Authors>
+        <Company>Zyker</Company>
+        <Description>Exception handling filters and extension methods for dependency injection.</Description>
+        <PackageIcon>ZYKER--logo.png</PackageIcon>
+        <PackageIconUrl>https://github.com/nashokin/Zyker.Core.ApiClient/blob/957ba03d97bb632d181dded7e017898a7624b9c3/ZYKER--logo.png</PackageIconUrl>
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <PackageProjectUrl>https://github.com/nashokin/Zyker.Core.ExceptionHandling</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/nashokin/Zyker.Core.ExceptionHandling</RepositoryUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="..\README.md">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
+        <None Include="..\ZYKER--logo.png">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.3.13" />
+    </ItemGroup>
+
+</Project>

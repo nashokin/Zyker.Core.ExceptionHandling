@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
+    <File Path="global.json" />
+    <File Path="README.md" />
+    <File Path="ZYKER--logo.png" />
+  </Folder>
+  <Project Path="Zyker.Core.ExceptionHandling.Tests/Zyker.Core.ExceptionHandling.Tests.csproj" />
+  <Project Path="Zyker.Core.ExceptionHandling/Zyker.Core.ExceptionHandling.csproj" />
+</Solution>
