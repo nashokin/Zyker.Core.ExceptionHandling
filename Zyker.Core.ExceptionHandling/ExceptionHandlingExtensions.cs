@@ -18,8 +18,13 @@ public static class ExceptionHandlingExtensions
         {
             options.Filters.Add<ApiExceptionFilterAttribute>();
             options.Filters.Add(new ProducesResponseTypeAttribute(typeof(ApiError), StatusCodes.Status400BadRequest));
+            options.Filters.Add(new ProducesResponseTypeAttribute(typeof(ApiError), StatusCodes.Status409Conflict));
+            options.Filters.Add(new ProducesResponseTypeAttribute(typeof(ApiError), StatusCodes.Status403Forbidden));
             options.Filters.Add(new ProducesResponseTypeAttribute(typeof(ApiError), StatusCodes.Status500InternalServerError));
             options.Filters.Add(new ProducesResponseTypeAttribute(typeof(ApiError), StatusCodes.Status404NotFound));
+            options.Filters.Add(new ProducesResponseTypeAttribute(typeof(ApiError), StatusCodes.Status501NotImplemented));
+            options.Filters.Add(new ProducesResponseTypeAttribute(typeof(ApiError), StatusCodes.Status429TooManyRequests));
+            options.Filters.Add(new ProducesResponseTypeAttribute(typeof(ApiError), StatusCodes.Status401Unauthorized));
         });
 
         return services;
