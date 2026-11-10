@@ -3,7 +3,7 @@ using System.Net;
 
 namespace Zyker.Core.ExceptionHandling.Exceptions;
 /// <summary>
-///     Class to represent a "Bad Request" (400) error response.
+///     Class to represent "Bad Request" (400) error response.
 /// </summary>
 public sealed class BadRequestException
     : ApiException

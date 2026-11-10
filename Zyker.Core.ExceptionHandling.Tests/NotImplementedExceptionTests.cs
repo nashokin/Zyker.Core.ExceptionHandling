@@ -1,5 +1,6 @@
+using System;
 using System.Net;
-using Zyker.Core.ExceptionHandling.Exceptions;
+using NotImplementedException = Zyker.Core.ExceptionHandling.Exceptions.NotImplementedException;
 
 namespace Zyker.Core.ExceptionHandling.Tests;
 /// <summary>
@@ -10,6 +11,12 @@ public sealed class NotImplementedExceptionTests
 {
     protected override NotImplementedException CreateException()
         => new();
+
+    protected override NotImplementedException CreateException(string message, string errorCode)
+        => new(message, errorCode);
+
+    protected override NotImplementedException CreateException(string message, string errorCode, Exception innerException)
+        => new(message, errorCode, innerException);
 
     protected override HttpStatusCode ExpectedStatusCode
         => HttpStatusCode.NotImplemented;

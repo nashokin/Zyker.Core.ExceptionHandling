@@ -3,7 +3,7 @@ using System.Net;
 
 namespace Zyker.Core.ExceptionHandling.Exceptions;
 /// <summary>
-///     Class to represent an "Conflict" (409) error response.
+///     Class to represent "Conflict" (409) error response.
 /// </summary>
 public sealed class ConflictException
     : ApiException

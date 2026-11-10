@@ -3,7 +3,7 @@ using System.Net;
 
 namespace Zyker.Core.ExceptionHandling.Exceptions;
 /// <summary>
-///     Class to represent a "Not Implemented" (501) error response.
+///     Class to represent "Not Implemented" (501) error response.
 /// </summary>
 public sealed class NotImplementedException
     : ApiException

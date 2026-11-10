@@ -3,7 +3,7 @@ using System.Net;
 
 namespace Zyker.Core.ExceptionHandling.Exceptions;
 /// <summary>
-///     Class to represent an "Unauthorized" (401) error response.
+///     Class to represent "Unauthorized" (401) error response.
 /// </summary>
 public sealed class UnauthorizedException
     : ApiException
