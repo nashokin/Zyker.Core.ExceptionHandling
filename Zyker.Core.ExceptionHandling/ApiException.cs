@@ -28,7 +28,10 @@ public abstract class ApiException
     /// </summary>
     protected ApiException()
         : base()
-    { }
+    {
+        CorrelationId = Guid.CreateVersion7(DateTimeOffset.UtcNow).ToString();
+        ErrorCode = ApiErrorCodes.NOT_AVAILABLE;
+    }
 
     /// <summary>
     ///     Creates new instance of the <see cref="ApiException"/> class.
@@ -38,6 +41,7 @@ public abstract class ApiException
     protected ApiException(string message, string errorCode)
         : base(message)
     {
+        CorrelationId = Guid.CreateVersion7(DateTimeOffset.UtcNow).ToString();
         ErrorCode = errorCode;
     }
 
@@ -50,6 +54,7 @@ public abstract class ApiException
     protected ApiException(string message, string errorCode, Exception innerException)
         : base(message, innerException)
     {
+        CorrelationId = Guid.CreateVersion7(DateTimeOffset.UtcNow).ToString();
         ErrorCode = errorCode;
     }
 
