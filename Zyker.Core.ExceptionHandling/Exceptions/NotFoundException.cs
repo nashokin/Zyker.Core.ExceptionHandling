@@ -5,7 +5,7 @@ namespace Zyker.Core.ExceptionHandling.Exceptions;
 /// <summary>
 ///     Class to represent a "Bad Request" (400) error response.
 /// </summary>
-public class NotFoundException
+public sealed class NotFoundException
     : ApiException
 {
     /// <summary>

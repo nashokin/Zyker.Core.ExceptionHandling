@@ -5,7 +5,7 @@ namespace Zyker.Core.ExceptionHandling.Exceptions;
 /// <summary>
 ///     Class to represent an "Internal Server Error" (500) error response.
 /// </summary>
-public class InternalException
+public sealed class InternalException
     : ApiException
 {
     /// <summary>
