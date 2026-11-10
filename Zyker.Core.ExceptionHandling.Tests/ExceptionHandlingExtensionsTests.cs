@@ -38,11 +38,31 @@ public class ExceptionHandlingExtensionsTests
             && attribute.Type == typeof(ApiError));
 
         Assert.Contains(options.Filters, f => f is ProducesResponseTypeAttribute attribute
+            && attribute.StatusCode == StatusCodes.Status409Conflict
+            && attribute.Type == typeof(ApiError));
+
+        Assert.Contains(options.Filters, f => f is ProducesResponseTypeAttribute attribute
+            && attribute.StatusCode == StatusCodes.Status403Forbidden
+            && attribute.Type == typeof(ApiError));
+
+        Assert.Contains(options.Filters, f => f is ProducesResponseTypeAttribute attribute
             && attribute.StatusCode == StatusCodes.Status500InternalServerError
             && attribute.Type == typeof(ApiError));
 
         Assert.Contains(options.Filters, f => f is ProducesResponseTypeAttribute attribute
             && attribute.StatusCode == StatusCodes.Status404NotFound
+            && attribute.Type == typeof(ApiError));
+
+        Assert.Contains(options.Filters, f => f is ProducesResponseTypeAttribute attribute
+            && attribute.StatusCode == StatusCodes.Status501NotImplemented
+            && attribute.Type == typeof(ApiError));
+
+        Assert.Contains(options.Filters, f => f is ProducesResponseTypeAttribute attribute
+            && attribute.StatusCode == StatusCodes.Status429TooManyRequests
+            && attribute.Type == typeof(ApiError));
+
+        Assert.Contains(options.Filters, f => f is ProducesResponseTypeAttribute attribute
+            && attribute.StatusCode == StatusCodes.Status401Unauthorized
             && attribute.Type == typeof(ApiError));
     }
 }

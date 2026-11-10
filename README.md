@@ -1,20 +1,44 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+# Common API exceptions filters
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+[![Build](https://github.com/nashokin/Zyker.Core.ExceptionHandling/actions/workflows/build.yaml/badge.svg)](https://github.com/nashokin/Zyker.Core.ExceptionHandling/actions/workflows/build.yaml)
+![NuGet Version](https://img.shields.io/nuget/v/Zyker.Core.ExceptionHandling)
+[![Quality gate status](https://sonarcloud.io/api/project_badges/measure?project=nashokin_Zyker.Core.ExceptionHandling&metric=alert_status&token=c69756e22fb9febc4b9e9982bf99688441bc8d5a)](https://sonarcloud.io/summary/new_code?id=nashokin_Zyker.Core.ExceptionHandling)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=nashokin_Zyker.Core.ExceptionHandling&metric=coverage&token=c69756e22fb9febc4b9e9982bf99688441bc8d5a)](https://sonarcloud.io/summary/new_code?id=nashokin_Zyker.Core.ExceptionHandling)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+Provides a set of strongly-typed exceptions designed for **API** development. Each exception maps to a specific **HTTP** status code, making it easy to build consistent error handling and response middleware pipelines.
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+---
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+### Available Exceptions
+
+| Exception | HTTP Status Code | Description |
+|-----------|------------------|-------------|
+| `BadRequestException` | 400 Bad Request | The request is invalid, malformed, or contains unsupported parameters. |
+| `ConflictException` | 409 Conflict | The request conflicts with the current state of the resource. |
+| `ForbiddenException` | 403 Forbidden | The user is authenticated but does not have sufficient permissions. |
+| `InternalException` | 500 Internal Server Error | An unexpected server-side error has occurred. |
+| `NotFoundException` | 404 Not Found | The requested resource could not be found. |
+| `NotImplementedException` | 501 Not Implemented | The requested functionality has not been implemented. |
+| `TooManyRequestsException` | 429 Too Many Requests | The client has exceeded an allowed request rate or quota. |
+| `UnauthorizedException` | 401 Unauthorized | Authentication is required or authentication credentials are invalid. |
+| `ValidationException` | 400 Bad Request | The request is valid but fails business or input validation rules. |
+
+---
+
+### Basic Usage
+```csharp
+public async Task<User> GetUserAsync(Guid id)
+{
+    var user = await repository.GetByIdAsync(id);
+
+    if (user is null)
+    {
+        throw new NotFoundException(
+            $"User '{id}' was not found.",
+            ApiErrorCodes.NOT_FOUND);
+    }
+
+    return user;
+}
+```
